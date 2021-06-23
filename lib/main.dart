@@ -17,17 +17,10 @@ class MyApp extends StatelessWidget {
           'login': (BuildContext context) => LoginPage(),
           'home': (BuildContext context) => HomePage(),
         },
+        theme: ThemeData(
+          primaryColor: Colors.deepPurple,
+        ),
       ),
     );
-
-    // return MaterialApp(
-    //   title: 'Material App',
-    //   debugShowCheckedModeBanner: false,
-    //   initialRoute: 'login',
-    //   routes: {
-    //     'login': (BuildContext context) => LoginPage(),
-    //     'home': (BuildContext context) => HomePage(),
-    //   },
-    // );
   }
 }

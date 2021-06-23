@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:formularios_bloc/src/bloc/login_bloc.dart';
+export 'package:formularios_bloc/src/bloc/login_bloc.dart';
 
 class Provider extends InheritedWidget {
   final loginBlock = LoginBloc();
@@ -8,11 +9,10 @@ class Provider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    // TODO: implement updateShouldNotify
     throw UnimplementedError();
   }
 
-  static Future<LoginBloc> of(BuildContext context) async {
+  static LoginBloc of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>()!.loginBlock;
   }
 }
