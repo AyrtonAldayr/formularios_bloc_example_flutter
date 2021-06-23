@@ -9,6 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
+      count: (1),
       child: MaterialApp(
         title: 'Material App',
         debugShowCheckedModeBanner: false,

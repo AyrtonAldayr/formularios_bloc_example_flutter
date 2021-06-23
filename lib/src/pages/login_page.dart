@@ -166,7 +166,6 @@ class LoginPage extends StatelessWidget {
                 labelText: 'Contraseña',
                 errorText:
                     (snapshot.error == null ? null : snapshot.error.toString()),
-                // counterText: snapshot.data,
               ),
               onChanged: (value) => bloc.changesPassword(value.trim())),
         );

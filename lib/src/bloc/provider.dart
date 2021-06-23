@@ -4,12 +4,15 @@ export 'package:formularios_bloc/src/bloc/login_bloc.dart';
 
 class Provider extends InheritedWidget {
   final loginBlock = LoginBloc();
+  final Widget child;
+  final int count;
 
-  Provider({Key? key, required Widget child}) : super(key: key, child: child);
+  Provider({Key? key, required this.child, required this.count})
+      : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    throw UnimplementedError();
+  bool updateShouldNotify(Provider oldWidget) {
+    return count == oldWidget.count;
   }
 
   static LoginBloc of(BuildContext context) {
