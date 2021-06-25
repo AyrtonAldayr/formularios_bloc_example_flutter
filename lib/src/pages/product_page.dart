@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:formularios_bloc/src/models/product_model.dart';
 import 'package:formularios_bloc/src/services/productos.services.dart';
 import 'package:formularios_bloc/src/utils/utils.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProductPage extends StatefulWidget {
   @override
@@ -12,8 +15,10 @@ class _ProductPageState extends State<ProductPage> {
   final fomrKey = GlobalKey<FormState>();
   final saffoldKey = GlobalKey<ScaffoldState>();
   final productoNuevo = new ProductoService();
+
   ProductoModel producto = new ProductoModel();
   bool _guardando = false;
+  late File foto = new File("");
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +34,13 @@ class _ProductPageState extends State<ProductPage> {
         title: Text('Page producto'),
         actions: [
           IconButton(
-            onPressed: () {},
+            // onPressed: _seleccionarFoto(ImageSource.gallery),
+            // onPressed: () => print('Seleccionar Foto'),
+            onPressed: () => _procesarImagen(ImageSource.gallery),
             icon: Icon(Icons.photo_size_select_actual),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => _procesarImagen(ImageSource.camera),
             icon: Icon(Icons.camera_alt),
           ),
         ],
@@ -45,6 +52,7 @@ class _ProductPageState extends State<ProductPage> {
             key: fomrKey,
             child: Column(
               children: [
+                _mostrarFoto(),
                 _crearNombre(),
                 _crearPrecio(),
                 _crearDiponible(),
@@ -156,5 +164,77 @@ class _ProductPageState extends State<ProductPage> {
       content: Text('$mensaje'),
       duration: Duration(milliseconds: 1500),
     );
+  }
+
+  _mostrarFoto() {
+    if (producto.fotoUrl != null) {
+      // TODO: PENDIENTE
+      return Container();
+    } else {
+      return _assetImage();
+    }
+  }
+
+  Image _assetImage() {
+    final url = foto.path;
+
+    if (url.isNotEmpty) {
+      return Image(
+        image: FileImage(foto),
+        height: 300.0,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Image(
+        image: AssetImage('assets/no-image.png'),
+        height: 300.0,
+        fit: BoxFit.cover,
+      );
+    }
+  }
+
+  // _seleccionarFoto(ImageSource origin) async {
+  //   final _picker = ImagePicker();
+  //   final pickedFile = await _picker.getImage(
+  //     source: origin,
+  //   );
+  //   if (pickedFile != null) {
+  //     foto = File(pickedFile.path);
+  //   }
+  //   // ignore: unnecessary_null_comparison
+  //   if (foto != null) {
+  //     // product.urlImg = null;
+  //   }
+  //   setState(() {});
+  // }
+
+  // _tomarFoto(ImageSource origin) async {
+  //   final _picker = ImagePicker();
+  //   final pickedFile = await _picker.getImage(
+  //     source: origin,
+  //   );
+  //   if (pickedFile != null) {
+  //     foto = File(pickedFile.path);
+  //   }
+  //   // ignore: unnecessary_null_comparison
+  //   if (foto != null) {
+  //     // product.urlImg = null;
+  //   }
+  //   setState(() {});
+  // }
+
+  _procesarImagen(ImageSource origin) async {
+    final _picker = ImagePicker();
+    final pickedFile = await _picker.getImage(
+      source: origin,
+    );
+    if (pickedFile != null) {
+      foto = File(pickedFile.path);
+    }
+    // ignore: unnecessary_null_comparison
+    if (foto != null) {
+      // product.urlImg = null;
+    }
+    setState(() {});
   }
 }

@@ -3,7 +3,12 @@ import 'package:formularios_bloc/src/services/productos.services.dart';
 // import 'package:formularios_bloc/src/bloc/provider.dart';
 import 'package:formularios_bloc/src/models/product_model.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final productoServices = new ProductoService();
 
   @override
