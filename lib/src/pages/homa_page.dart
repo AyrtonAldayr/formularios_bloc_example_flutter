@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:formularios_bloc/src/services/productos.services.dart';
-// import 'package:formularios_bloc/src/bloc/provider.dart';
+import 'package:formularios_bloc/src/bloc/provider.dart';
 import 'package:formularios_bloc/src/models/product_model.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class HomePage extends StatelessWidget {
   final productoServices = new ProductoService();
 
   @override
   Widget build(BuildContext context) {
-    // final bloc = Provider.of(context);
+    final bloc = Provider.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -28,6 +23,7 @@ class _HomePageState extends State<HomePage> {
     return FloatingActionButton(
       onPressed: () => Navigator.pushNamed(context, 'producto'),
       child: Icon(Icons.add),
+      backgroundColor: Colors.deepPurple,
     );
   }
 
@@ -59,11 +55,26 @@ class _HomePageState extends State<HomePage> {
       onDismissed: (direction) {
         productoServices.borrarProducto(producto.id!);
       },
-      child: ListTile(
-        title: Text('${producto.titulo} - ${producto.valor}'),
-        subtitle: Text('${producto.id}'),
-        onTap: () =>
-            Navigator.pushNamed(context, 'producto', arguments: producto),
+      child: Card(
+        child: Column(
+          children: [
+            (producto.fotoUrl == null || producto.fotoUrl!.isEmpty)
+                ? Image(image: AssetImage('assets/no-image.png'))
+                : FadeInImage(
+                    placeholder: AssetImage('assets/jar-loading.gif'),
+                    image: NetworkImage(producto.fotoUrl!),
+                    height: 300.0,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+            ListTile(
+              title: Text('${producto.titulo} - ${producto.valor}'),
+              subtitle: Text('${producto.id}'),
+              onTap: () =>
+                  Navigator.pushNamed(context, 'producto', arguments: producto),
+            ),
+          ],
+        ),
       ),
     );
   }

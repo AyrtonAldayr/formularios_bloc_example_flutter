@@ -134,31 +134,6 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
-  void _submit(BuildContext context) {
-    if (!fomrKey.currentState!.validate()) return;
-    fomrKey.currentState!.save();
-    // print(producto.titulo);
-    // print(producto.valor);
-    // print(producto.disponible);
-
-    setState(() {
-      _guardando = true;
-    });
-
-    if (producto.id == null) {
-      productoNuevo.crearProducto(producto);
-    } else {
-      productoNuevo.actualizarProducto(producto);
-    }
-
-    // setState(() {
-    //   _guardando = false;
-    // });
-    ScaffoldMessenger.of(context)
-        .showSnackBar(mostrarSnackBac('Registro Guardado'));
-    Navigator.pop(context);
-  }
-
   SnackBar mostrarSnackBac(String mensaje) {
     return SnackBar(
       content: Text('$mensaje'),
@@ -167,9 +142,13 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   _mostrarFoto() {
-    if (producto.fotoUrl != null) {
-      // TODO: PENDIENTE
-      return Container();
+    if (producto.fotoUrl != null && producto.fotoUrl!.isNotEmpty) {
+      return FadeInImage(
+        placeholder: AssetImage('assets/jar-loading.gif'),
+        image: NetworkImage(producto.fotoUrl!),
+        height: 300.0,
+        fit: BoxFit.contain,
+      );
     } else {
       return _assetImage();
     }
@@ -193,36 +172,6 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
-  // _seleccionarFoto(ImageSource origin) async {
-  //   final _picker = ImagePicker();
-  //   final pickedFile = await _picker.getImage(
-  //     source: origin,
-  //   );
-  //   if (pickedFile != null) {
-  //     foto = File(pickedFile.path);
-  //   }
-  //   // ignore: unnecessary_null_comparison
-  //   if (foto != null) {
-  //     // product.urlImg = null;
-  //   }
-  //   setState(() {});
-  // }
-
-  // _tomarFoto(ImageSource origin) async {
-  //   final _picker = ImagePicker();
-  //   final pickedFile = await _picker.getImage(
-  //     source: origin,
-  //   );
-  //   if (pickedFile != null) {
-  //     foto = File(pickedFile.path);
-  //   }
-  //   // ignore: unnecessary_null_comparison
-  //   if (foto != null) {
-  //     // product.urlImg = null;
-  //   }
-  //   setState(() {});
-  // }
-
   _procesarImagen(ImageSource origin) async {
     final _picker = ImagePicker();
     final pickedFile = await _picker.getImage(
@@ -231,10 +180,31 @@ class _ProductPageState extends State<ProductPage> {
     if (pickedFile != null) {
       foto = File(pickedFile.path);
     }
-    // ignore: unnecessary_null_comparison
-    if (foto != null) {
-      // product.urlImg = null;
+    if (foto.path.isNotEmpty) {
+      print('Ingreso al foto.path.isNotEmpty');
+      producto.fotoUrl = '';
     }
     setState(() {});
+  }
+
+  void _submit(BuildContext context) async {
+    if (!fomrKey.currentState!.validate()) return;
+    fomrKey.currentState!.save();
+    setState(() {
+      _guardando = true;
+    });
+
+    if (foto.path.isNotEmpty) {
+      producto.fotoUrl = await productoNuevo.subirImagen(foto);
+    }
+
+    if (producto.id == null) {
+      productoNuevo.crearProducto(producto);
+    } else {
+      productoNuevo.actualizarProducto(producto);
+    }
+    ScaffoldMessenger.of(context)
+        .showSnackBar(mostrarSnackBac('Registro Guardado'));
+    Navigator.pop(context);
   }
 }

@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:formularios_bloc/src/models/product_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:mime_type/mime_type.dart' as mime;
 
 class ProductoService {
   final String _url =
@@ -41,6 +44,37 @@ class ProductoService {
     final response = await http.delete(_convertUrl('productos/$id'));
     print(response.body);
     return 1;
+  }
+
+  Future<String> subirImagen(File imagen) async {
+    final url = Uri.parse(
+        'https://api.cloudinary.com/v1_1/dl33cmea0/image/upload?upload_preset=vkukesun');
+
+    final mimeType = mime.mime(imagen.path)!.split('/');
+
+    final imageUploadRequest = http.MultipartRequest('POST', url);
+
+    final file = await http.MultipartFile.fromPath(
+      'file',
+      imagen.path,
+      contentType: MediaType(mimeType[0], mimeType[1]),
+    );
+
+    imageUploadRequest.files.add(file);
+
+    final streamResponse = await imageUploadRequest.send();
+    final repuesta = await http.Response.fromStream(streamResponse);
+
+    if (repuesta.statusCode != 200 && repuesta.statusCode != 201) {
+      // print('Algo salio mal');
+      // print(repuesta.body);
+      return '';
+    }
+
+    final respData = json.decode(repuesta.body);
+    // print(respData);
+
+    return respData['secure_url'];
   }
 
   Uri _convertUrl(String valor) {
