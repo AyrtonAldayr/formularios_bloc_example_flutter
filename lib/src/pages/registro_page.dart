@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:formularios_bloc/src/bloc/provider.dart';
 import 'package:formularios_bloc/src/services/usuario.services.dart';
 
-class LoginPage extends StatelessWidget {
+class RegistroPage extends StatelessWidget {
   final UsuarioService usuarioService = new UsuarioService();
 
   @override
@@ -97,7 +97,7 @@ class LoginPage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Ingreso',
+                  'Crear cuenta',
                   style: TextStyle(fontSize: 20.0),
                 ),
                 SizedBox(
@@ -117,9 +117,8 @@ class LoginPage extends StatelessWidget {
           ),
           // Text('¿Olvido la contraseña?'),
           TextButton(
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, 'registro'),
-            child: Text('Crear una nueva cuenta'),
+            onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
+            child: Text('¿Ya tienes cuenta? Login'),
           ),
           SizedBox(
             height: 100.0,
@@ -198,14 +197,16 @@ class LoginPage extends StatelessWidget {
               ),
               shadowColor: Colors.blueAccent,
             ),
-            onPressed: snapshot.hasData ? () => _loginDto(bloc, context) : null,
+            onPressed:
+                snapshot.hasData ? () => _registroUser(bloc, context) : null,
           );
         });
   }
 
-  _loginDto(LoginBloc bloc, BuildContext context) {
-    usuarioService.login(bloc.getEmail, bloc.getPassword);
-
+  _registroUser(LoginBloc bloc, BuildContext context) {
     // Navigator.pushNamed(context, 'home');
+
+    usuarioService.nuevoUsuario(bloc.getEmail, bloc.getPassword);
+    // print(valor);
   }
 }

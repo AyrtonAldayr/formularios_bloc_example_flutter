@@ -66,14 +66,9 @@ class ProductoService {
     final repuesta = await http.Response.fromStream(streamResponse);
 
     if (repuesta.statusCode != 200 && repuesta.statusCode != 201) {
-      // print('Algo salio mal');
-      // print(repuesta.body);
       return '';
     }
-
     final respData = json.decode(repuesta.body);
-    // print(respData);
-
     return respData['secure_url'];
   }
 
