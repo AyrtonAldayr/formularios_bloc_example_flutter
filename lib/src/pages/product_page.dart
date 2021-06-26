@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:formularios_bloc/src/bloc/provider.dart';
 import 'package:formularios_bloc/src/models/product_model.dart';
-import 'package:formularios_bloc/src/services/productos.services.dart';
+// import 'package:formularios_bloc/src/services/productos.services.dart';
 import 'package:formularios_bloc/src/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,14 +15,18 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   final fomrKey = GlobalKey<FormState>();
   final saffoldKey = GlobalKey<ScaffoldState>();
-  final productoNuevo = new ProductoService();
+  // final productoNuevo = new ProductoService();
 
+  late ProductosBloc productosBloc;
   ProductoModel producto = new ProductoModel();
   bool _guardando = false;
   late File foto = new File("");
 
   @override
   Widget build(BuildContext context) {
+    productosBloc = Provider.productosBloc(context);
+
+    //Obtengo los valores que de ProductoModel que se han enviado por argumento
     final arguments2 = ModalRoute.of(context)!.settings.arguments;
 
     if (arguments2 != null) {
@@ -134,13 +139,6 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
-  SnackBar mostrarSnackBac(String mensaje) {
-    return SnackBar(
-      content: Text('$mensaje'),
-      duration: Duration(milliseconds: 1500),
-    );
-  }
-
   _mostrarFoto() {
     if (producto.fotoUrl != null && producto.fotoUrl!.isNotEmpty) {
       return FadeInImage(
@@ -195,16 +193,26 @@ class _ProductPageState extends State<ProductPage> {
     });
 
     if (foto.path.isNotEmpty) {
-      producto.fotoUrl = await productoNuevo.subirImagen(foto);
+      // producto.fotoUrl = await productoNuevo.subirImagen(foto);
+      producto.fotoUrl = await productosBloc.subirFoto(foto);
     }
 
     if (producto.id == null) {
-      productoNuevo.crearProducto(producto);
+      // productoNuevo.crearProducto(producto);
+      productosBloc.agregarProducto(producto);
     } else {
-      productoNuevo.actualizarProducto(producto);
+      // productoNuevo.actualizarProducto(producto);
+      productosBloc.agregarProducto(producto);
     }
     ScaffoldMessenger.of(context)
         .showSnackBar(mostrarSnackBac('Registro Guardado'));
     Navigator.pop(context);
+  }
+
+  SnackBar mostrarSnackBac(String mensaje) {
+    return SnackBar(
+      content: Text('$mensaje'),
+      duration: Duration(milliseconds: 1500),
+    );
   }
 }

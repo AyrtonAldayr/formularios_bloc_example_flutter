@@ -34,6 +34,7 @@ class ProductoService {
     final response = await http.get(_convertUrl('productos'));
     final Map<String, dynamic> decodedData = json.decode(response.body);
     final List<ProductoModel> productos = [];
+    if (decodedData['error'] != null) return [];
     if (decodedData.isEmpty) return [];
     decodedData.forEach((id, prod) {
       final productoTemp = ProductoModel.fromJson(prod);
