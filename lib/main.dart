@@ -16,9 +16,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final preferencias = PreferenciasUsuario();
-    print("preferencias.getToken: ${preferencias.getToken}");
-
     return Provider(
       count: (1),
       child: MaterialApp(

@@ -20,7 +20,7 @@ class UsuarioService {
       body: json.encode(authData),
     );
     Map<String, dynamic> decodedResp = json.decode(response.body);
-    print(decodedResp);
+    // print(decodedResp);
 
     if (decodedResp.containsKey('idToken')) {
       _preferencias.setToken = decodedResp['idToken'];
@@ -44,7 +44,7 @@ class UsuarioService {
       body: json.encode(authData),
     );
     Map<String, dynamic> decodedResp = json.decode(response.body);
-    print(decodedResp);
+    // print(decodedResp);
 
     if (decodedResp.containsKey('idToken')) {
       _preferencias.setToken = decodedResp['idToken'];

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:formularios_bloc/src/models/product_model.dart';
+import 'package:formularios_bloc/src/preferencias_usuario/preferencia_usuario.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart' as mime;
@@ -9,20 +10,23 @@ import 'package:mime_type/mime_type.dart' as mime;
 class ProductoService {
   final String _url =
       'https://flutter-proyecto-formulario-default-rtdb.firebaseio.com/';
+  final preferencias = PreferenciasUsuario();
 
   Future<bool> crearProducto(ProductoModel producto) async {
     final response = await http.post(_convertUrl('productos'),
         body: productoModelToJson(producto));
+    // ignore: unused_local_variable
     final decodedData = json.decode(response.body);
-    print(decodedData);
+    // print(decodedData);
     return true;
   }
 
   Future<bool> actualizarProducto(ProductoModel producto) async {
     final response = await http.put(_convertUrl('productos/${producto.id}'),
         body: productoModelToJson(producto));
+    // ignore: unused_local_variable
     final decodedData = json.decode(response.body);
-    print(decodedData);
+    // print(decodedData);
     return true;
   }
 
@@ -41,8 +45,9 @@ class ProductoService {
   }
 
   Future<int> borrarProducto(String id) async {
+    // ignore: unused_local_variable
     final response = await http.delete(_convertUrl('productos/$id'));
-    print(response.body);
+    // print(response.body);
     return 1;
   }
 
@@ -73,6 +78,6 @@ class ProductoService {
   }
 
   Uri _convertUrl(String valor) {
-    return Uri.parse('$_url/$valor.json');
+    return Uri.parse('$_url/$valor.json?auth=${preferencias.getToken}');
   }
 }

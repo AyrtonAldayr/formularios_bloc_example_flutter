@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:formularios_bloc/src/bloc/provider.dart';
 import 'package:formularios_bloc/src/services/usuario.services.dart';
+import 'package:formularios_bloc/src/utils/utils.dart' as util;
 
 class RegistroPage extends StatelessWidget {
   final UsuarioService usuarioService = new UsuarioService();
@@ -203,10 +204,14 @@ class RegistroPage extends StatelessWidget {
         });
   }
 
-  _registroUser(LoginBloc bloc, BuildContext context) {
-    // Navigator.pushNamed(context, 'home');
+  _registroUser(LoginBloc bloc, BuildContext context) async {
+    final Map info =
+        await usuarioService.nuevoUsuario(bloc.getEmail, bloc.getPassword);
 
-    usuarioService.nuevoUsuario(bloc.getEmail, bloc.getPassword);
-    // print(valor);
+    if (info['ok']) {
+      Navigator.pushNamed(context, 'home');
+    } else {
+      util.mostrarAlerta(context, info['mensaje']);
+    }
   }
 }
