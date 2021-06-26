@@ -6,3 +6,6 @@ Manejo de block para un poqueño formulario de login.
 
 - [rxdart](https://pub.dev/packages/rxdart)
 - [InheritedWidget class](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html)
+
+##Libreria Utilizada para generar los Iconos para el despliegue
+- [flutter_launcher_icons]
